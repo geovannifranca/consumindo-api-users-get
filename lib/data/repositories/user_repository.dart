@@ -6,20 +6,14 @@ abstract class IUsersRepository {
 }
 
 class UserRepository implements IUsersRepository {
-  final IHttpClient client;
+  final IHttpClient clint;
+  final url = 'https://reqres.in/api/users?page=2';
 
-  UserRepository({
-    required this.client,
-  });
+  UserRepository({required this.clint});
 
   @override
   Future<List<UserModel>> getUsers() async {
-    final response =
-        await client.get(url: 'https://reqres.in/api/users?page=2');
-    final body = response.data;
-    if (body.statusCode == 200) {
-        final<List<UserModel>> 
-    }
-    
+    final response = await clint.get(url: url);
+    return response.map((map) => UserModel.fromMap(map)).toList();
   }
 }

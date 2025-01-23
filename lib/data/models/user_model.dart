@@ -12,7 +12,7 @@ class UserModel {
     required this.lastName,
     required this.avatar,
   });
-  
+
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
       id: map['id'] ?? 0,
