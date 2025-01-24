@@ -23,7 +23,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme.of(context).primaryColorLight,
         title: Text(widget.title),
       ),
       body: AnimatedBuilder(
@@ -33,16 +33,77 @@ class _MyHomePageState extends State<MyHomePage> {
           store.erro,
         ]),
         builder: (context, widget) {
-          return ListView.separated(
-            itemCount: store.state.value.length,
-            separatorBuilder: (context, index) => const SizedBox(
-              height: 8.0,
-            ),
-            itemBuilder: (context, index) {
-              final item = store.state.value[index];
-              return Center(child: Text(item.firstName));
-            },
-          );
+          if (store.isLoading.value) {
+            return const CircularProgressIndicator();
+          } else {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 40),
+              child: ListView.separated(
+                itemCount: store.state.value.length,
+                separatorBuilder: (context, index) => const SizedBox(
+                  height: 24,
+                ),
+                itemBuilder: (context, index) {
+                  final item = store.state.value[index];
+                  return Card(
+                    color: Theme.of(context).primaryColorLight,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 40.0,
+                                backgroundImage: NetworkImage(item.avatar),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${item.firstName} ${item.lastName}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                        Text(
+                                          item.email,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        )
+                                      ],
+                                    ),
+                                    const Icon(Icons.verified_user_rounded),
+                                    const SizedBox(
+                                      width: 16,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            );
+          }
         },
       ),
     );
